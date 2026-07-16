@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings – FastGrowth Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><i class="fas fa-bolt"></i><span>FastGrowth</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="index.html" class="sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="analytics.html" class="sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+      <a href="messages.html" class="sidebar-link"><i class="fas fa-envelope"></i> Messages</a>
+      <div class="nav-section-label">Manage</div>
+      <a href="users.html" class="sidebar-link"><i class="fas fa-users"></i> Users</a>
+      <a href="blog.html" class="sidebar-link"><i class="fas fa-blog"></i> Blog</a>
+      <div class="nav-section-label">Account</div>
+      <a href="profile.html" class="sidebar-link"><i class="fas fa-user"></i> Profile</a>
+      <a href="settings.html" class="sidebar-link active"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer"><a href="#" class="sidebar-link logout-btn" style="padding:0;"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
+  </aside>
+
+  <div class="dashboard-main">
+    <header class="dashboard-topbar">
+      <div class="topbar-left">
+        <button id="sidebarToggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+        <span class="topbar-title">Settings</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-ghost theme-toggle topbar-icon"><i class="theme-icon fas fa-moon"></i></button>
+        <div class="user-avatar">A</div>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <div class="settings-grid">
+        <!-- General -->
+        <div class="settings-card">
+          <h3><i class="fas fa-globe" style="color:var(--primary);margin-right:0.5rem;"></i>General Settings</h3>
+          <form onsubmit="event.preventDefault();showToast('Settings saved!')">
+            <div class="form-group"><label>Site Name</label><input type="text" class="form-control" value="FastGrowth" /></div>
+            <div class="form-group"><label>Site Tagline</label><input type="text" class="form-control" value="Accelerate Your Business Growth" /></div>
+            <div class="form-group"><label>Contact Email</label><input type="email" class="form-control" value="hello@fastgrowth.com" /></div>
+            <div class="form-group"><label>Phone</label><input type="text" class="form-control" value="+1 (555) 123-4567" /></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+          </form>
+        </div>
+
+        <!-- Notifications -->
+        <div class="settings-card">
+          <h3><i class="fas fa-bell" style="color:var(--primary);margin-right:0.5rem;"></i>Notifications</h3>
+          <form onsubmit="event.preventDefault();showToast('Notification preferences saved!')">
+            <div class="form-group" style="display:flex;justify-content:space-between;align-items:center;">
+              <label style="margin:0;">New message alerts</label>
+              <input type="checkbox" checked />
+            </div>
+            <hr class="divider" />
+            <div class="form-group" style="display:flex;justify-content:space-between;align-items:center;">
+              <label style="margin:0;">Weekly analytics report</label>
+              <input type="checkbox" checked />
+            </div>
+            <hr class="divider" />
+            <div class="form-group" style="display:flex;justify-content:space-between;align-items:center;">
+              <label style="margin:0;">New user registrations</label>
+              <input type="checkbox" />
+            </div>
+            <hr class="divider" />
+            <div class="form-group" style="display:flex;justify-content:space-between;align-items:center;">
+              <label style="margin:0;">System updates</label>
+              <input type="checkbox" checked />
+            </div>
+            <button type="submit" class="btn btn-primary mt-4"><i class="fas fa-save"></i> Save Preferences</button>
+          </form>
+        </div>
+
+        <!-- Security -->
+        <div class="settings-card">
+          <h3><i class="fas fa-lock" style="color:var(--primary);margin-right:0.5rem;"></i>Security</h3>
+          <form onsubmit="event.preventDefault();showToast('Password updated!')">
+            <div class="form-group"><label>Current Password</label><input type="password" class="form-control" placeholder="••••••••" /></div>
+            <div class="form-group"><label>New Password</label><input type="password" class="form-control" placeholder="••••••••" /></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" class="form-control" placeholder="••••••••" /></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i> Update Password</button>
+          </form>
+        </div>
+
+        <!-- Appearance -->
+        <div class="settings-card">
+          <h3><i class="fas fa-palette" style="color:var(--primary);margin-right:0.5rem;"></i>Appearance</h3>
+          <div class="form-group">
+            <label>Theme</label>
+            <div style="display:flex;gap:1rem;margin-top:0.5rem;">
+              <button class="btn btn-outline btn-sm theme-toggle"><i class="theme-icon fas fa-moon"></i> Toggle Theme</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Primary Color</label>
+            <input type="color" value="#2563eb" style="width:48px;height:36px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;" onchange="document.documentElement.style.setProperty('--primary',this.value)" />
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+</body>
+</html>

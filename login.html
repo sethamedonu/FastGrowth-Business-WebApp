@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – FastGrowth</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card animate-fadeInUp">
+      <div class="auth-logo">
+        <i class="fas fa-bolt"></i>
+        <h1>FastGrowth</h1>
+        <p>Sign in to your account</p>
+      </div>
+
+      <div id="loginAlert" class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> Invalid email or password.</div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="you@company.com" />
+          <span class="error-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div style="position:relative;">
+            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" style="padding-right:2.5rem;" />
+            <button type="button" id="togglePwd" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);color:var(--text-muted);"><i class="fas fa-eye"></i></button>
+          </div>
+          <span class="error-msg"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:var(--text-sm);cursor:pointer;">
+            <input type="checkbox" name="remember" /> Remember me
+          </label>
+          <a href="#" style="font-size:var(--text-sm);color:var(--primary);">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary w-full" style="justify-content:center;">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+      </form>
+
+      <div class="divider"></div>
+      <p style="text-align:center;font-size:var(--text-sm);color:var(--text-muted);">
+        Don't have an account? <a href="contact.html" style="color:var(--primary);font-weight:600;">Contact us</a>
+      </p>
+      <p style="text-align:center;margin-top:1rem;"><a href="index.html" style="font-size:var(--text-sm);color:var(--text-muted);"><i class="fas fa-arrow-left"></i> Back to website</a></p>
+    </div>
+  </div>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (Auth.isLoggedIn()) window.location.href = 'dashboard/index.html';
+
+    // Toggle password visibility
+    document.getElementById('togglePwd').addEventListener('click', function () {
+      const pwd  = document.getElementById('password');
+      const icon = this.querySelector('i');
+      if (pwd.type === 'password') { pwd.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+      else { pwd.type = 'password'; icon.className = 'fas fa-eye'; }
+    });
+
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email    = this.email.value.trim();
+      const password = this.password.value;
+      const alertEl  = document.getElementById('loginAlert');
+
+      if (!email || !password) {
+        alertEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your email and password.';
+        alertEl.classList.add('show');
+        return;
+      }
+
+      const btn = this.querySelector('[type="submit"]');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Signing in…';
+      alertEl.classList.remove('show');
+
+      try {
+        const res = await api.login(email, password);
+        Auth.setSession(res.token, res.user);
+        window.location.href = 'dashboard/index.html';
+      } catch (err) {
+        alertEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${err.message}`;
+        alertEl.classList.add('show');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

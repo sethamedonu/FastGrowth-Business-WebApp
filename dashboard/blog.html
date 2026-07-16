@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Manager – FastGrowth Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header"><i class="fas fa-bolt"></i><span>FastGrowth</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="index.html" class="sidebar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="analytics.html" class="sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+      <a href="messages.html" class="sidebar-link"><i class="fas fa-envelope"></i> Messages</a>
+      <div class="nav-section-label">Manage</div>
+      <a href="users.html" class="sidebar-link"><i class="fas fa-users"></i> Users</a>
+      <a href="blog.html" class="sidebar-link active"><i class="fas fa-blog"></i> Blog</a>
+      <div class="nav-section-label">Account</div>
+      <a href="profile.html" class="sidebar-link"><i class="fas fa-user"></i> Profile</a>
+      <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer"><a href="#" class="sidebar-link logout-btn" style="padding:0;"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
+  </aside>
+
+  <div class="dashboard-main">
+    <header class="dashboard-topbar">
+      <div class="topbar-left">
+        <button id="sidebarToggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+        <span class="topbar-title">Blog Manager</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-ghost theme-toggle topbar-icon"><i class="theme-icon fas fa-moon"></i></button>
+        <div class="user-avatar">A</div>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <div class="table-card">
+        <div class="table-header">
+          <h3>All Posts</h3>
+          <button class="btn btn-primary btn-sm" id="newPostBtn"><i class="fas fa-plus"></i> New Post</button>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="postsBody"><tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Post Modal -->
+<div id="postModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;align-items:center;justify-content:center;">
+  <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;width:90%;max-width:560px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;">
+    <h3 style="margin-bottom:1.5rem;" id="postModalTitle">New Post</h3>
+    <form id="postForm">
+      <input type="hidden" name="id" />
+      <div class="form-group"><label>Title</label><input type="text" name="title" class="form-control" required /></div>
+      <div class="form-group"><label>Category</label>
+        <select name="category" class="form-control">
+          <option>Growth Strategy</option><option>Technology</option><option>Marketing</option>
+          <option>Leadership</option><option>Sales</option><option>SEO</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Content</label><textarea name="content" class="form-control" rows="6" required></textarea></div>
+      <div class="form-group"><label>Status</label>
+        <select name="status" class="form-control"><option value="draft">Draft</option><option value="published">Published</option></select>
+      </div>
+      <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;">
+        <button type="button" id="cancelPostModal" class="btn btn-outline btn-sm">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm">Save Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+  async function loadPosts() {
+    const tbody = document.getElementById('postsBody');
+    try {
+      const res = await api.posts.list();
+      if (!res.data.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No posts yet</td></tr>';
+        return;
+      }
+      tbody.innerHTML = res.data.map(p => `
+        <tr id="post-${p.id}">
+          <td>${p.title}</td>
+          <td>${statusBadge(p.category.toLowerCase().replace(' ', '-'))}</td>
+          <td>${p.author_name || '—'}</td>
+          <td>${formatDate(p.created_at)}</td>
+          <td>${statusBadge(p.status)}</td>
+          <td>
+            <button class="btn btn-ghost btn-sm" onclick="editPost(${p.id})"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-ghost btn-sm" style="color:var(--danger);" onclick="deletePost(${p.id})"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>`).join('');
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--danger);">${err.message}</td></tr>`;
+    }
+  }
+
+  async function editPost(id) {
+    try {
+      const res = await api.posts.get(id);
+      const p   = res.data;
+      const form = document.getElementById('postForm');
+      form.id.value       = p.id;
+      form.title.value    = p.title;
+      form.category.value = p.category;
+      form.content.value  = p.content;
+      form.status.value   = p.status;
+      document.getElementById('postModalTitle').textContent = 'Edit Post';
+      document.getElementById('postModal').style.display = 'flex';
+    } catch (err) { showToast(err.message, 'danger'); }
+  }
+
+  async function deletePost(id) {
+    if (!await confirmAction('Delete this post? This cannot be undone.')) return;
+    try {
+      await api.posts.delete(id);
+      document.getElementById(`post-${id}`)?.remove();
+      showToast('Post deleted');
+    } catch (err) { showToast(err.message, 'danger'); }
+  }
+
+  // Modal
+  const modal = document.getElementById('postModal');
+  document.getElementById('newPostBtn').onclick     = () => {
+    document.getElementById('postForm').reset();
+    document.getElementById('postModalTitle').textContent = 'New Post';
+    modal.style.display = 'flex';
+  };
+  document.getElementById('cancelPostModal').onclick = () => modal.style.display = 'none';
+
+  document.getElementById('postForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const btn = this.querySelector('[type="submit"]');
+    btn.disabled = true;
+    const id = this.id.value;
+    const body = {
+      title:    this.title.value.trim(),
+      category: this.category.value,
+      content:  this.content.value.trim(),
+      status:   this.status.value,
+    };
+    try {
+      if (id) { await api.posts.update(id, body); showToast('Post updated'); }
+      else    { await api.posts.create(body);      showToast('Post created'); }
+      modal.style.display = 'none';
+      this.reset();
+      loadPosts();
+    } catch (err) {
+      showToast(err.message, 'danger');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  loadPosts();
+</script>
+</body>
+</html>

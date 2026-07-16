@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – FastGrowth</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+<div class="dashboard-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header"><i class="fas fa-bolt"></i><span>FastGrowth</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a href="index.html" class="sidebar-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="analytics.html" class="sidebar-link"><i class="fas fa-chart-bar"></i> Analytics</a>
+      <a href="messages.html" class="sidebar-link"><i class="fas fa-envelope"></i> Messages <span class="badge badge-danger" style="margin-left:auto;">5</span></a>
+      <div class="nav-section-label">Manage</div>
+      <a href="users.html" class="sidebar-link"><i class="fas fa-users"></i> Users</a>
+      <a href="blog.html" class="sidebar-link"><i class="fas fa-blog"></i> Blog</a>
+      <div class="nav-section-label">Account</div>
+      <a href="profile.html" class="sidebar-link"><i class="fas fa-user"></i> Profile</a>
+      <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" class="sidebar-link logout-btn" style="padding:0;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="dashboard-main">
+    <header class="dashboard-topbar">
+      <div class="topbar-left">
+        <button id="sidebarToggle" class="btn btn-ghost"><i class="fas fa-bars"></i></button>
+        <span class="topbar-title">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-ghost theme-toggle topbar-icon"><i class="theme-icon fas fa-moon"></i></button>
+        <button class="topbar-icon"><i class="fas fa-bell"></i><span class="notif-dot"></span></button>
+        <div class="user-avatar">A</div>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <!-- Stat Cards -->
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+          <div class="stat-info"><h3 id="statUsers">—</h3><p>Total Users</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-envelope"></i></div>
+          <div class="stat-info"><h3 id="statMessages">—</h3><p>Total Messages</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fas fa-bell"></i></div>
+          <div class="stat-info"><h3 id="statNew">—</h3><p>New Messages</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fas fa-blog"></i></div>
+          <div class="stat-info"><h3 id="statPosts">—</h3><p>Total Posts</p></div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-header"><h3>Revenue Overview</h3><span class="badge badge-primary">2025</span></div>
+          <canvas id="revenueChart" height="100"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><h3>Traffic Sources</h3></div>
+          <canvas id="trafficChart" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Messages -->
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Recent Messages</h3>
+          <a href="messages.html" class="btn btn-outline btn-sm">View All</a>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="recentMsgBody"><tr><td colspan="5" style="text-align:center;color:var(--text-muted);">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script src="../assets/js/charts.js"></script>
+<script>
+  // Load stats
+  api.stats().then(res => {
+    document.getElementById('statUsers').textContent    = res.data.totalUsers;
+    document.getElementById('statMessages').textContent = res.data.totalMessages;
+    document.getElementById('statNew').textContent      = res.data.newMessages;
+    document.getElementById('statPosts').textContent    = res.data.totalPosts;
+  }).catch(() => {});
+
+  // Load recent messages
+  api.messages.list({ limit: 5 }).then(res => {
+    const tbody = document.getElementById('recentMsgBody');
+    if (!res.data.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">No messages yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = res.data.map(m => `
+      <tr>
+        <td>${m.name}</td>
+        <td>${m.email}</td>
+        <td>${m.subject}</td>
+        <td>${formatDate(m.created_at)}</td>
+        <td>${statusBadge(m.status)}</td>
+      </tr>`).join('');
+  }).catch(() => {});
+</script>
+</body>
+</html>

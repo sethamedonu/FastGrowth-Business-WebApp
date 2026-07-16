@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio – FastGrowth</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><i class="fas fa-bolt"></i><span>FastGrowth</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="portfolio.html" class="active">Portfolio</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn btn-ghost theme-toggle"><i class="theme-icon fas fa-moon"></i></button>
+        <a href="login.html" class="btn btn-primary btn-sm">Login</a>
+        <button class="nav-toggle btn btn-ghost"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <span class="section-tag">Our Work</span>
+      <h1>Portfolio</h1>
+      <p>A selection of projects that showcase our expertise and the results we deliver.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="portfolio-filter reveal">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="web">Web</button>
+        <button class="filter-btn" data-filter="marketing">Marketing</button>
+        <button class="filter-btn" data-filter="analytics">Analytics</button>
+        <button class="filter-btn" data-filter="strategy">Strategy</button>
+      </div>
+
+      <div class="grid-3" id="portfolioGrid">
+        <div class="portfolio-item reveal delay-1" data-category="web">
+          <div class="portfolio-img"><i class="fas fa-laptop-code"></i></div>
+          <div class="portfolio-overlay"><h3>E-Commerce Platform</h3><p>Web Development</p></div>
+        </div>
+        <div class="portfolio-item reveal delay-2" data-category="marketing">
+          <div class="portfolio-img" style="background:linear-gradient(135deg,#7c3aed,#2563eb);"><i class="fas fa-bullhorn"></i></div>
+          <div class="portfolio-overlay"><h3>Brand Campaign</h3><p>Digital Marketing</p></div>
+        </div>
+        <div class="portfolio-item reveal delay-3" data-category="analytics">
+          <div class="portfolio-img" style="background:linear-gradient(135deg,#10b981,#2563eb);"><i class="fas fa-chart-pie"></i></div>
+          <div class="portfolio-overlay"><h3>Analytics Dashboard</h3><p>Data & Analytics</p></div>
+        </div>
+        <div class="portfolio-item reveal delay-1" data-category="strategy">
+          <div class="portfolio-img" style="background:linear-gradient(135deg,#f59e0b,#ef4444);"><i class="fas fa-chess"></i></div>
+          <div class="portfolio-overlay"><h3>Growth Strategy</h3><p>Business Strategy</p></div>
+        </div>
+        <div class="portfolio-item reveal delay-2" data-category="web">
+          <div class="portfolio-img" style="background:linear-gradient(135deg,#2563eb,#10b981);"><i class="fas fa-mobile-alt"></i></div>
+          <div class="portfolio-overlay"><h3>Mobile App</h3><p>Web Development</p></div>
+        </div>
+        <div class="portfolio-item reveal delay-3" data-category="marketing">
+          <div class="portfolio-img" style="background:linear-gradient(135deg,#7c3aed,#f59e0b);"><i class="fas fa-envelope-open-text"></i></div>
+          <div class="portfolio-overlay"><h3>Email Campaign</h3><p>Digital Marketing</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0;">
+        <p>&copy; 2025 FastGrowth. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.portfolio-item');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        items.forEach(item => {
+          item.style.display = (f === 'all' || item.dataset.category === f) ? 'block' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

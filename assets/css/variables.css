@@ -1,0 +1,79 @@
+:root {
+  /* Colors */
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #7c3aed;
+  --accent: #f59e0b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+
+  /* Neutrals */
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Dark mode */
+  --bg: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --card-bg: #ffffff;
+  --sidebar-bg: #1f2937;
+  --sidebar-text: #d1d5db;
+
+  /* Typography */
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* Misc */
+  --radius: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  --transition: 0.3s ease;
+  --navbar-height: 70px;
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --bg-secondary: #1e293b;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --card-bg: #1e293b;
+  --sidebar-bg: #0f172a;
+  --sidebar-text: #94a3b8;
+}
