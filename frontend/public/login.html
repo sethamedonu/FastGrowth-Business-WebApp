@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login – FastGrowth</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
 </head>
 <body>
 
@@ -48,15 +48,15 @@
       <p style="text-align:center;font-size:var(--text-sm);color:var(--text-muted);">
         Don't have an account? <a href="contact.html" style="color:var(--primary);font-weight:600;">Contact us</a>
       </p>
-      <p style="text-align:center;margin-top:1rem;"><a href="index.html" style="font-size:var(--text-sm);color:var(--text-muted);"><i class="fas fa-arrow-left"></i> Back to website</a></p>
+      <p style="text-align:center;margin-top:1rem;"><a href="../public/index.html" style="font-size:var(--text-sm);color:var(--text-muted);"><i class="fas fa-arrow-left"></i> Back to website</a></p>
     </div>
   </div>
 
-  <script src="assets/js/theme.js"></script>
-  <script src="assets/js/api.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/api.js"></script>
   <script>
     // Redirect if already logged in
-    if (Auth.isLoggedIn()) window.location.href = 'dashboard/index.html';
+    if (Auth.isLoggedIn()) window.location.href = '../dashboard/index.html';
 
     // Toggle password visibility
     document.getElementById('togglePwd').addEventListener('click', function () {
@@ -87,7 +87,7 @@
       try {
         const res = await api.login(email, password);
         Auth.setSession(res.token, res.user);
-        window.location.href = 'dashboard/index.html';
+        window.location.href = '../dashboard/index.html';
       } catch (err) {
         alertEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${err.message}`;
         alertEl.classList.add('show');
